@@ -2,8 +2,11 @@ use std::{collections::BTreeMap, num::NonZero};
 
 use serde::{Deserialize, Serialize};
 
+pub const BASE_BAITROUTE_DIR: &str = "baitroute/rules/";
+
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Rule {
+    pub filename: Option<String>,
     pub method: String,
     pub path: String,
     pub status: NonZero<u16>,

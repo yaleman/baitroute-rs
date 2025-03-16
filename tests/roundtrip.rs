@@ -1,3 +1,5 @@
+use baitroute_rs::BASE_BAITROUTE_DIR;
+
 #[test]
 fn test_yaml_roundtrip() -> Result<(), usize> {
     if !std::path::Path::new("baitroute").exists() {
@@ -18,7 +20,7 @@ fn test_yaml_roundtrip() -> Result<(), usize> {
     .to_vec();
 
     for path in ["exposures", "info", "vulnerabilities"] {
-        for file in std::fs::read_dir(format!("baitroute/rules/{}/", path)).unwrap() {
+        for file in std::fs::read_dir(format!("{}{}/", BASE_BAITROUTE_DIR, path)).unwrap() {
             let file = file.unwrap_or_else(|err| panic!("Failed to read {}: {:?}", path, err));
             // load the contents of the file
 

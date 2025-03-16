@@ -1,10 +1,13 @@
 use std::collections::BTreeSet;
 
+use baitroute_rs::BASE_BAITROUTE_DIR;
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug)]
 struct BeelzebubRule {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     pub regex: String,
     pub handler: String,
     // #[serde(skip_serializing_if = "Option::is_none")]
@@ -108,7 +111,7 @@ fn main() -> Result<(), usize> {
     }
 
     for path in ["exposures", "info", "vulnerabilities"] {
-        for file in std::fs::read_dir(format!("baitroute/rules/{}/", path)).unwrap() {
+        for file in std::fs::read_dir(format!("{}{}", BASE_BAITROUTE_DIR, path)).unwrap() {
             let file = file.unwrap_or_else(|err| panic!("Failed to read {}: {:?}", path, err));
             // load the contents of the file
             if skippable
@@ -127,7 +130,16 @@ fn main() -> Result<(), usize> {
                 panic!("Failed to deserialize {}: {:?}", file.path().display(), err)
             });
 
-            for rule in rules.into_iter() {
+            for mut rule in rules.into_iter() {
+                if rule.filename.is_none() {
+                    rule.filename = Some(
+                        file.path()
+                            .display()
+                            .to_string()
+                            .replace(BASE_BAITROUTE_DIR, ""),
+                    );
+                }
+
                 let regex = format!("^{}$", rule.path);
 
                 let headers = match rule.headers.is_empty() {
@@ -140,6 +152,7 @@ fn main() -> Result<(), usize> {
                 };
 
                 let beelrule = BeelzebubRule {
+                    name: rule.filename,
                     regex,
                     handler: rule.body,
                     headers,
