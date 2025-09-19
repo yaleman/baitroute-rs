@@ -17,7 +17,7 @@ fn main() {
                 panic!("Failed to read {}: {:?}", file.path().display(), err)
             });
             // parse the contents of the file
-            let _rule: baitroute_rs::Rules = serde_yml::from_str(&contents).unwrap_or_else(|err| {
+            let _rule: baitroute_rs::Rules = serde_norway::from_str(&contents).unwrap_or_else(|err| {
                 panic!("Failed to deserialize {}: {:?}", file.path().display(), err)
             });
 

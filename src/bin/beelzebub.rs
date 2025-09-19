@@ -88,7 +88,7 @@ fn main() -> Result<(), usize> {
                 Ok(val) => val,
             };
             eprintln!("Parsing {}", config);
-            match serde_yml::from_str(&contents) {
+            match serde_norway::from_str(&contents) {
                 Ok(val) => {
                     eprintln!("Finished parsing {}", config);
                     val
@@ -126,7 +126,7 @@ fn main() -> Result<(), usize> {
                 panic!("Failed to read {}: {:?}", file.path().display(), err)
             });
             // parse the contents of the file
-            let rules: baitroute_rs::Rules = serde_yml::from_str(&contents).unwrap_or_else(|err| {
+            let rules: baitroute_rs::Rules = serde_norway::from_str(&contents).unwrap_or_else(|err| {
                 panic!("Failed to deserialize {}: {:?}", file.path().display(), err)
             });
 
@@ -167,7 +167,7 @@ fn main() -> Result<(), usize> {
         }
     }
 
-    let output = serde_yml::to_string(&config)
+    let output = serde_norway::to_string(&config)
         .unwrap_or_else(|err| panic!("Failed to serialize: {:?}", err));
 
     let output_filename = match (cli.update, cli.output, &cli.config) {

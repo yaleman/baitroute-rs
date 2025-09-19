@@ -6,4 +6,4 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.5.47", features = ["derive"] }
 serde = { version = "1.0.225", features = ["derive"] }
-serde_yml = "0.0.12"
+serde_norway = "0.9.42"

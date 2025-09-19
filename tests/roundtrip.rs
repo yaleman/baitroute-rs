@@ -37,18 +37,18 @@ fn test_yaml_roundtrip() -> Result<(), usize> {
                 panic!("Failed to read {}: {:?}", file.path().display(), err)
             });
             // parse the contents of the file
-            let rules: baitroute_rs::Rules = serde_yml::from_str(&contents).unwrap_or_else(|err| {
+            let rules: baitroute_rs::Rules = serde_norway::from_str(&contents).unwrap_or_else(|err| {
                 panic!("Failed to deserialize {}: {:?}", file.path().display(), err)
             });
 
             // serialise to yaml
-            let yaml = serde_yml::to_string(&rules).unwrap_or_else(|err| {
+            let yaml = serde_norway::to_string(&rules).unwrap_or_else(|err| {
                 panic!("Failed to serialise {}: {:?}", file.path().display(), err)
             });
             println!("{}", yaml);
             // parse the serialised yaml
             let _rules2: baitroute_rs::Rules =
-                std::panic::catch_unwind(|| serde_yml::from_str(&yaml).expect("failed to parse"))
+                std::panic::catch_unwind(|| serde_norway::from_str(&yaml).expect("failed to parse"))
                     .unwrap_or_else(|_| {
                         panic!("Panic occurred while parsing {}", file.path().display())
                     });
